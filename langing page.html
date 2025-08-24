@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Foodie - Delicious Food Services</title>
+  <style>
+    /* Reset & Basics */
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff8f0;
+      color: #333;
+      line-height: 1.6;
+    }
+    /* Header & Nav */
+    header {
+      background-color: #ff6b35;
+      color: white;
+      padding: 20px 40px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    header h1 { font-weight: bold; font-size: 1.8rem; }
+    nav a {
+      color: white;
+      margin-left: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+    nav a:hover { color: #ffe5d1; }
+    /* Main Content */
+    main {
+      max-width: 1200px;
+      margin: 100px auto 50px;
+      padding: 0 20px;
+    }
+    section { margin-bottom: 70px; }
+    section h2 {
+      color: #ff6b35;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border-bottom: 3px solid #ff6b35;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+    /* Menu Section */
+    #menu ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+      gap: 20px;
+    }
+    #menu li {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+    #menu li:hover { transform: scale(1.05); }
+    .dish-name { font-weight: 700; font-size: 1.2rem; margin-bottom: 8px; }
+    .dish-desc { font-size: 0.9rem; color: #666; margin-bottom: 10px; }
+    .dish-price { color: #ff6b35; font-weight: 700; font-size: 1.1rem; }
+    /* Services Section */
+    #services ul {
+      list-style: disc inside;
+      max-width: 700px;
+      margin-left: 20px;
+    }
+    /* Reservations Section */
+    #reservations form {
+      max-width: 400px;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    #reservations label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    #reservations input, #reservations select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    #reservations button {
+      background-color: #ff6b35;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+    #reservations button:hover { background-color: #e85a2c; }
+    #reservations .success-message {
+      color: green;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    /* Location Section */
+    #location iframe {
+      width: 100%;
+      height: 350px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    /* Order Section */
+    #order button {
+      background-color: #ff6b35;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #order button:hover { background-color: #e85a2c; }
+    /* Gallery Section */
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 15px;
+    }
+    #gallery img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    #gallery img:hover { transform: scale(1.05); }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      color: #777;
+      font-size: 0.9rem;
+      border-top: 1px solid #ddd;
+      margin-top: 50px;
+    }
+    /* Modals (Login & Signup) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+      padding-top: 60px;
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: auto;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .modal-content h2 {
+      margin-bottom: 20px;
+      color: #ff6b35;
+      text-align: center;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .modal-content button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ff6b35;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .modal-content button:hover { background-color: #e85a2c; }
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #555;
+      cursor: pointer;
+    }
+    /* Responsive */
+    @media (max-width: 600px) {
+      header { flex-direction: column; gap: 10px; }
+      nav a { margin-left: 10px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Foodie</h1>
+    <nav>
+      <a href="#menu">Menu</a>
+      <a href="#services">Services</a>
+      <a href="#reservations">Reservations</a>
+      <a href="#location">Location</a>
+      <a href="#order">Order Online</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#" id="loginBtn">Login</a>
+      <a href="#" id="signupBtn">Sign Up</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Menu Section -->
+    <section id="menu">
+      <h2>Our Menu</h2>
+      <ul>
+        <li>
+          <div class="dish-name">Spaghetti Carbonara</div>
+          <div class="dish-desc">Classic Italian pasta with creamy sauce and pancetta.</div>
+          <div class="dish-price">$12.99</div>
+        </li>
+        <li>
+          <div class="dish-name">Margherita Pizza</div>
+          <div class="dish-desc">Fresh tomatoes, mozzarella, basil, and olive oil.</div>
+          <div class="dish-price">$10.99</div>
+        </li>
+        <li>
+          <div class="dish-name">Caesar Salad</div>
+          <div class="dish-desc">Crisp romaine lettuce with Caesar dressing and croutons.</div>
+          <div class="dish-price">$8.99</div>
+        </li>
+        <li>
+          <div class="dish-name">Grilled Salmon</div>
+          <div class="dish-desc">Served with lemon butter sauce and steamed vegetables.</div>
+          <div class="dish-price">$16.99</div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+      <h2>Our Services</h2>
+      <ul>
+        <li>Dine-in with cozy ambiance</li>
+        <li>Takeaway and Delivery</li>
+        <li>Catering for events and parties</li>
+        <li>Online order and payment</li>
+        <li>Custom menu planning</li>
+      </ul>
+    </section>
+
+    <!-- Reservations Section -->
+    <section id="reservations">
+      <h2>Make a Reservation</h2>
+      <form id="reservationForm">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" required placeholder="Your name" />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" required placeholder="you@example.com" />
+
+        <label for="date">Date</label>
+        <input type="date" id="date" required min="" />
+
+        <label for="time">Time</label>
+        <input type="time" id="time" required />
+
+        <label for="guests">Number of Guests</label>
+        <select id="guests" required>
+          <option value="" disabled selected>Select guests</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5+">5+</option>
+        </select>
+
+        <button type="submit">Reserve Table</button>
+        <div class="success-message" id="reservationSuccess" style="display: none;">
+          Thank you! Your reservation is confirmed.
+        </div>
+      </form>
+    </section>
+
+    <!-- Location Section -->
+    <section id="location">
+      <h2>Find Us Here</h2>
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3...
+        allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Foodie Location">
+      </iframe>
+    </section>
+
+    <!-- Order Online Section -->
+    <section id="order">
+      <h2>Order Online</h2>
+      <p>Craving your favorite dish? Order online and get it delivered fast!</p>
+      <button id="orderBtn">Order Now</button>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery">
+      <h2>Gallery</h2>
+      <img src="https://images.unsplash.com/photo-1504674900247...q=80" alt="Dish 1" />
+      <img src="https://images.unsplash.com/photo-1543352634…?q=80" alt="Dish 2" />
+      <img src="https://images.unsplash.com/photo-1525610553991…?q=80" alt="Dish 3" />
+      <img src="https://images.unsplash.com/photo-1506368249639…?q=80" alt="Dish 4" />
+      <img src="https://images.unsplash.com/photo-1504754524776…?q=80" alt="Dish 5" />
+      <img src="https://images.unsplash.com/photo-1543353071…?q=80" alt="Dish 6" />
+    </section>
+  </main>
+
+  <footer>&copy; 2025 Foodie. All rights reserved.</footer>
+
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('loginModal')">&times;</span>
+      <h2>Login to Foodie</h2>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email" required />
+        <input type="password" id="loginPassword" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('signupModal')">&times;</span>
+      <h2>Create an Account</h2>
+      <form id="signupForm">
+        <input type="text" id="signupName" placeholder="Full Name" required />
+        <input type="email" id="signupEmail" placeholder="Email" required />
+        <input type="password" id="signupPassword" placeholder="Password" required />
+        <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" required />
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Script: Logic for Forms & Modals -->
+  <script>
+    // Set min date for reservation
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.setAttribute('min', today);
+    }
+
+    // Reservation form handling
+    const reservationForm = document.getElementById('reservationForm');
+    const successMessage = document.getElementById('reservationSuccess');
+    reservationForm?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      successMessage.style.display = 'block';
+      setTimeout(() => { successMessage.style.display = 'none'; }, 5000);
+      reservationForm.reset();
+    });
+
+    // Order button action
+    document.getElementById('orderBtn')?.addEventListener('click', () => {
+      alert('Redirecting to online order page (demo).');
+      // window.location.href = 'order.html';
+    });
+
+    // Modal logic
+    const loginModal = document.getElementById('loginModal');
+    const signupModal = document.getElementById('signupModal');
+    document.getElementById('loginBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      loginModal.style.display = 'block';
+    });
+    document.getElementById('signupBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      signupModal.style.display = 'block';
+    });
+    function closeModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+    window.onclick = function(e) {
+      if (e.target === loginModal) closeModal('loginModal');
+      if (e.target === signupModal) closeModal('signupModal');
+    }
+
+    // Login validation
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      if (!email || !password) {
+        alert('Please fill in all fields.');
+        return;
+      }
+      alert('Login successful (demo only)!');
+      closeModal('loginModal');
+    });
+
+    // Signup validation
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value.trim();
+      const confirmPassword = document.getElementById('signupConfirmPassword').value.trim();
+      if (!name || !email || !password || !confirmPassword) {
+        alert('Please fill in all fields.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+      alert('Account created successfully (demo only)!');
+      closeModal('signupModal');
+    });
+  </script>
+</body>
+</html>
